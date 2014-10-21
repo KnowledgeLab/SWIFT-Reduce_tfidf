@@ -1,0 +1,32 @@
+site=beagle
+execution.retries=0
+sitedir.keep=true
+wrapperlog.always.transfer=true
+use.provider.staging=true
+
+site.westmere {
+  tasksPerWorker=12
+  taskWalltime=00:05:00
+  jobManager=swift.rcc.uchicago.edu:slurm
+  jobQueue=westmere
+  maxJobs=1
+  workdir=/scratch/midway/$USER/work
+  filesystem=local
+}
+
+site.beagle {
+  tasksPerWorker=24
+  taskWalltime=00:05:00
+  jobManager=login4.beagle.ci.uchicago.edu:pbs
+#  jobQueue=batch
+  jobQueue=development
+  maxJobs=200
+  workdir=/tmp/yadunandb/swiftwork
+  userHomeOverrride=/lustre/beagle/yadunandb/swiftwork
+  filesystem=local
+}
+
+# App definition
+app.westmere.python=/usr/bin/python
+app.beagle.python=/usr/bin/python
+app.westmere.echo=/bin/echo

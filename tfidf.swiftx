@@ -1,0 +1,201 @@
+<program xmlns="http://ci.uchicago.edu/swift/2009/02/swiftscript"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <types>
+     	<type>
+     		<typename>file</typename>
+     		<typealias>string</typealias>
+     		<typestructure></typestructure>
+     	</type>
+     	<type>
+     		<typename>script</typename>
+     		<typealias>string</typealias>
+     		<typestructure></typestructure>
+     	</type>
+  </types>
+  <procedure name="calculate_tf" src="line 4">
+
+    <output name="tf" type="file"  xsi:nil="true"/>
+
+    <output name="tf_csv" type="file"  xsi:nil="true"/>
+
+    <input name="calc_tf" type="script"  xsi:nil="true"/>
+
+    <input name="dir" type="string"  xsi:nil="true"/>
+
+    <input name="doc" type="file"  xsi:nil="true"/>
+
+    <input name="topn" type="string"  xsi:nil="true"/>
+
+    <input name="minf" type="string"  xsi:nil="true"/>
+    <binding>
+      <application src="line 4">
+        <executable>python</executable>
+        <function name="filename" src="line 5">
+          <variableReference>calc_tf</variableReference></function><variableReference>dir</variableReference><variableReference>topn</variableReference><variableReference>minf</variableReference><function name="filename" src="line 5">
+          <variableReference>tf</variableReference></function>  </application>
+    </binding>
+  </procedure>
+  <procedure name="merger" src="line 8">
+
+    <output name="o" type="file"  xsi:nil="true"/>
+
+    <input name="merge" type="script"  xsi:nil="true"/>
+
+    <input name="doc" type="file[]"  xsi:nil="true"/>
+    <binding>
+      <application src="line 8">
+        <executable>python_local</executable>
+        <function name="filename" src="line 9">
+          <variableReference>merge</variableReference></function><function name="filename" src="line 9">
+          <variableReference>o</variableReference></function><function name="filenames" src="line 9">
+          <variableReference>doc</variableReference></function>  </application>
+    </binding>
+  </procedure>
+  <procedure name="calculate_idf" src="line 12">
+
+    <output name="tfidf" type="file"  xsi:nil="true"/>
+
+    <input name="calc" type="script"  xsi:nil="true"/>
+
+    <input name="tf" type="file"  xsi:nil="true"/>
+
+    <input name="key" type="string"  xsi:nil="true"/>
+
+    <input name="report_top" type="string"  xsi:nil="true"/>
+    <binding>
+      <application src="line 12">
+        <executable>python</executable>
+        <stdout><function name="filename" src="line 13">
+          <variableReference>tfidf</variableReference></function></stdout><function name="filename" src="line 13">
+          <variableReference>calc</variableReference></function><variableReference>report_top</variableReference><function name="filename" src="line 13">
+          <variableReference>tf</variableReference></function><variableReference>key</variableReference>  </application>
+    </binding>
+  </procedure>
+  <procedure name="scrounge" src="line 16">
+
+    <output name="final" type="file"  xsi:nil="true"/>
+
+    <input name="s" type="script"  xsi:nil="true"/>
+
+    <input name="i" type="file[]"  xsi:nil="true"/>
+    <binding>
+      <application src="line 16">
+        <executable>bash</executable>
+        <stdout><function name="filename" src="line 17">
+          <variableReference>final</variableReference></function></stdout><function name="filename" src="line 17">
+          <variableReference>s</variableReference></function><function name="filename" src="line 17">
+          <variableReference>i</variableReference></function>  </application>
+    </binding>
+  </procedure>
+  <variable name="dir" type="string" isGlobal="false" xsi:nil="true" src="line 20"/>
+  <assign src="line 21">
+   <variableReference>dir</variableReference>
+   <function name="arg" src="line 20">
+     <stringConstant>data</stringConstant></function>
+  </assign>
+  <variable name="report_top" type="string" isGlobal="false" xsi:nil="true" src="line 21"/>
+  <assign src="line 22">
+   <variableReference>report_top</variableReference>
+   <function name="arg" src="line 21">
+     <stringConstant>topn</stringConstant></function>
+  </assign>
+  <variable name="min_freq" type="string" isGlobal="false" xsi:nil="true" src="line 22"/>
+  <assign src="line 25">
+   <variableReference>min_freq</variableReference>
+   <function name="arg" src="line 22">
+     <stringConstant>minf</stringConstant></function>
+  </assign>
+  <variable name="calc_tf" type="script" isGlobal="false" src="line 25"><file name="calculate_tf_scores.py"/></variable>
+  <variable name="all_docs" type="file[]" isGlobal="false" src="line 26">
+    <mapping descriptor="filesys_mapper">
+      <param name="location"><variableReference>dir</variableReference></param>
+      <param name="suffix"><stringConstant>.txt</stringConstant></param>
+    </mapping>
+  </variable>
+  <variable name="doc_tf" type="file[]" isGlobal="false" xsi:nil="true" src="line 27"/>
+  <foreach var="doc"  indexVar="index" src="line 28">
+  <in><variableReference>all_docs</variableReference></in>
+  <body><variable name="tf" type="file" isGlobal="false" src="line 29">
+      <mapping descriptor="single_file_mapper">
+        <param name="file"><function name="strcat" src="line 29">
+          <function name="filename" src="line 29">
+            <variableReference>doc</variableReference></function><stringConstant>.tf</stringConstant></function></param>
+      </mapping>
+    </variable>
+    <variable name="tf_csv" type="file" isGlobal="false" src="line 30">
+      <mapping descriptor="single_file_mapper">
+        <param name="file"><function name="strcat" src="line 30">
+          <function name="filename" src="line 30">
+            <variableReference>doc</variableReference></function><stringConstant>.tf.csv</stringConstant></function></param>
+      </mapping>
+    </variable>
+    <call proc="calculate_tf" src="line 31">
+      <output><variableReference>tf</variableReference></output>
+      <output><variableReference>tf_csv</variableReference></output>
+      <input><variableReference>calc_tf</variableReference></input>
+      <input><variableReference>dir</variableReference></input>
+      <input><variableReference>doc</variableReference></input>
+      <input><variableReference>report_top</variableReference></input>
+      <input><variableReference>min_freq</variableReference></input>
+    </call>
+    <assign src="line 33">
+     <arraySubscript>
+      <variableReference>doc_tf</variableReference>
+      <variableReference>index</variableReference>
+     </arraySubscript>
+     <variableReference>tf</variableReference>
+    </assign></body>
+  </foreach>
+  <variable name="merge" type="script" isGlobal="false" src="line 36"><file name="merge.py"/></variable>
+  <variable name="all_tf" type="file" isGlobal="false" src="line 37">
+    <mapping descriptor="single_file_mapper">
+      <param name="file"><function name="strcat" src="line 37">
+        <variableReference>dir</variableReference><stringConstant>/collection.tf</stringConstant></function></param>
+    </mapping>
+  </variable>
+  <call proc="merger" src="line 38">
+    <output><variableReference>all_tf</variableReference></output>
+    <input><variableReference>merge</variableReference></input>
+    <input><variableReference>doc_tf</variableReference></input>
+  </call>
+  <variable name="tfidf" type="file[]" isGlobal="false" xsi:nil="true" src="line 41"/>
+  <variable name="calc_idf" type="script" isGlobal="false" src="line 42"><file name="calculate_idf_scores.py"/></variable>
+  <foreach var="doc"  indexVar="index" src="line 43">
+  <in><variableReference>all_docs</variableReference></in>
+  <body><variable name="tfidf_t" type="file" isGlobal="false" src="line 44">
+      <mapping descriptor="single_file_mapper">
+        <param name="file"><function name="strcat" src="line 44">
+          <function name="filename" src="line 44">
+            <variableReference>doc</variableReference></function><stringConstant>.tfidf</stringConstant></function></param>
+      </mapping>
+    </variable>
+    <call proc="calculate_idf" src="line 45">
+      <output><variableReference>tfidf_t</variableReference></output>
+      <input><variableReference>calc_idf</variableReference></input>
+      <input><variableReference>all_tf</variableReference></input>
+      <input><function name="filename" src="line 45">
+        <variableReference>doc</variableReference></function></input>
+      <input><variableReference>report_top</variableReference></input>
+    </call>
+    <assign src="line 47">
+     <arraySubscript>
+      <variableReference>tfidf</variableReference>
+      <variableReference>index</variableReference>
+     </arraySubscript>
+     <variableReference>tfidf_t</variableReference>
+    </assign></body>
+  </foreach>
+  <variable name="concat" type="script" isGlobal="false" src="line 50"><file name="concat.sh"/></variable>
+  <variable name="final" type="file" isGlobal="false" src="line 51">
+    <mapping descriptor="single_file_mapper">
+      <param name="file"><function name="strcat" src="line 51">
+        <variableReference>dir</variableReference><stringConstant>/collection.tfidf.csv</stringConstant></function></param>
+    </mapping>
+  </variable>
+  <call proc="scrounge" src="line 52">
+    <output><variableReference>final</variableReference></output>
+    <input><variableReference>concat</variableReference></input>
+    <input><variableReference>tfidf</variableReference></input>
+  </call>
+</program>

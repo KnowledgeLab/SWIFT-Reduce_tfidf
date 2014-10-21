@@ -1,0 +1,17 @@
+site=westmere
+site.westmere.slurm.exclusive=false
+use.provider.staging=true
+
+site.westmere {
+   provider=local:slurm
+   jobsPerNode=12
+   maxWalltime=01:00:00
+   queue=westmere
+   initialScore=10000
+   filesystem=local
+   workdirectory=/scratch/midway/$USER/work
+}
+
+# App definition
+app.westmere.python=/usr/bin/python
+app.westmere.bash=/bin/bash

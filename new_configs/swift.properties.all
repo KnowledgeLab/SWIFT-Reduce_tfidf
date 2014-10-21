@@ -1,0 +1,62 @@
+site.local {
+   provider=local:local
+   jobsPerNode=1
+   maxWalltime=01:00:00
+   initialScore=10000
+   filesystem=local
+   workdirectory=/scratch/midway/$USER/work
+   jobthrottle=0.1999
+}
+
+site.amd {
+   provider=local:slurm
+   jobsPerNode=64
+   maxWalltime=01:00:00
+   queue=amd
+   initialScore=10000
+   filesystem=local
+   workdirectory=/scratch/midway/$USER/work
+}
+
+site.bigmem {
+   provider=local:slurm
+   jobsPerNode=16
+   maxWalltime=01:00:00
+   queue=bigmem
+   initialScore=10000
+   filesystem=local
+   workdirectory=/scratch/midway/$USER/work
+}
+
+site.gpu {
+   provider=local:slurm
+   jobsPerNode=16
+   maxWalltime=01:00:00
+   queue=gpu
+   initialScore=10000
+   filesystem=local
+   workdirectory=/scratch/midway/$USER/work
+}
+
+site.sandyb {
+   provider=local:slurm
+   jobspernode=16
+   maxWalltime=01:00:00
+   queue=sandyb
+   initialScore=10000
+   filesystem=local
+   workdirectory=/scratch/midway/$USER/work
+}
+
+site.westmere {
+   provider=local:slurm
+   jobsPerNode=12
+   maxWalltime=01:00:00
+   queue=westmere
+   initialScore=10000
+   filesystem=local
+   workdirectory=/scratch/midway/$USER/work
+}
+
+sitedir.keep=false
+wrapperlog.always.transfer=true

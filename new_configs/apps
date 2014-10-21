@@ -1,0 +1,2 @@
+local cat /bin/cat
+beagle python /soft/python/2.7/2.7.3-vanilla/python/bin/python

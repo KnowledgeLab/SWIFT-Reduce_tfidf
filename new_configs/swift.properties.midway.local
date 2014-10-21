@@ -1,0 +1,33 @@
+site=westmere,local1
+site.westmere.slurm.exclusive=false
+use.provider.staging=true
+execution.retries=2
+
+site.westmere {
+   taskWalltime=01:00:00
+#   queue=westmere
+   initialScore=10000
+   filesystem=local
+   workdir=/scratch/midway/$USER/work
+   jobmanager=slurm
+   jobqueue=sandyb
+   jobGranularity=4
+   maxNodesPerJob=8
+   maxJobs=20
+   tasksPerWorker=16
+   taskThrottle=800
+}
+
+site.local1 {
+   jobmanager=local
+#   jobwalltime=01:00:00
+   initialScore=10000
+   filesystem=local
+   workdir=/scratch/midway/$USER/work
+}
+
+# App definition
+app.westmere.python=/usr/bin/python
+#app.westmere.bash=/bin/bash
+app.local1.bash=/bin/bash
+app.local1.cat=/bin/cat

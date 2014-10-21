@@ -1,0 +1,24 @@
+site=beagle
+execution.retries=0
+sitedir.keep=true
+wrapperlog.always.transfer=true
+use.provider.staging=true
+
+site.beagle {
+  tasksPerWorker=24
+  taskWalltime=00:05:00
+  jobmanager=login4.beagle.ci.uchicago.edu:pbs
+  jobqueue=development
+  maxJobs=200
+  workdir=/tmp/yadunandb/swiftwork
+  userHomeOverrride=/lustre/beagle/yadunandb/swiftwork
+  filesystem=local
+  initialScore=10000
+  jobGranularity=1
+  maxNodesPerJob=1
+}
+
+# App definition
+app.beagle.python=/soft/python/2.7/2.7.3-vanilla/python/bin/python
+app.local.cat=/bin/cat
+app.local.bash=/bin/bash

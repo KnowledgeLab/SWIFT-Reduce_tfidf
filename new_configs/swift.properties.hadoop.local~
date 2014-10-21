@@ -1,0 +1,62 @@
+site=hadoop,local1
+use.provider.staging=true
+execution.retries=2
+
+site.hadoop {
+   taskWalltime=04:00:00
+   initialScore=10000
+   filesystem=local
+   workdir=/tmp/swiftwork
+   #   jobmanager=http://128.135.159.52:50001:local
+   jobmanager=coaster-persistent:local:local:http://128.135.159.52:50001
+   workerManager=passive
+   taskThrottle=800
+   workdir=/tmp/swiftwork
+}
+
+site.local1 {
+   jobmanager=local
+   jobwalltime=01:00:00
+   initialScore=10000
+   filesystem=local
+   workdir=/tmp/swiftwork
+}
+
+site.westmere {
+   taskWalltime=01:00:00
+   initialScore=10000
+   filesystem=local
+   workdir=/scratch/midway/$USER/work
+   jobmanager=swift.rcc.uchicago.edu:slurm
+   jobqueue=sandyb
+   jobGranularity=4
+   maxNodesPerJob=8
+   maxJobs=20
+   tasksPerWorker=16
+   taskThrottle=800
+}
+
+site.beagle {
+  tasksPerWorker=24
+  taskWalltime=00:05:00
+  jobmanager=login4.beagle.ci.uchicago.edu:pbs
+  #jobqueue=development
+  maxJobs=200
+  # Tweak these two
+  workdir=/tmp/yadunandb/swiftwork
+  #userHomeOverrride=/lustre/beagle/yadunandb/swiftwork
+  filesystem=local
+  initialScore=10000
+  jobGranularity=1
+  maxNodesPerJob=1
+}
+
+
+
+
+# App definition
+app.hadoop.python=/usr/bin/python
+app.beagle.python=/soft/python/2.7/2.7.3-vanilla/python/bin/python
+
+app.local1.bash=/bin/bash
+app.local1.cat=/bin/cat
